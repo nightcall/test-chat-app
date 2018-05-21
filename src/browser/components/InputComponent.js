@@ -2,7 +2,7 @@ import React from 'react';
 import './InputComponent.scss';
 import sendImg from './img/send.png';
 import { connect } from 'react-redux';
-import { inputChange } from '../actions/actions';
+import { inputChange, sendMessage } from '../actions/actions';
 
 class InputComponent extends React.PureComponent {
   constructor(props) {
@@ -13,11 +13,15 @@ class InputComponent extends React.PureComponent {
     const {
       username,
       currentMessage,
-      handleChange
+      handleChange,
+      handleSubmit
     } = this.props;
 
     return(
-      <form onSubmit={e => e.preventDefault()} >
+      <form onSubmit={e => {
+        e.preventDefault();
+        handleSubmit(currentMessage, username, '10:42')
+      }} >
         <input type='text' value={username}
           onChange={e => handleChange('username', e.target.value)} />
         <input name='currentMessage' type='text' value={currentMessage}
@@ -37,7 +41,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleChange: (name, value) => dispatch(inputChange(name, value))
+    handleChange: (name, value) => dispatch(inputChange(name, value)),
+    handleSubmit: (text, username, date) => dispatch(sendMessage(JSON.stringify({
+      text,
+      username,
+      date
+    })))
   };
 };
 

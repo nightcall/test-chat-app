@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
-import { createStore} from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import chatApp from './reducers/reducers';
-import io from 'socket.io-client';
+import Socket from './Socket';
+import { receiveMessage } from './actions/actions';
 
-const socket = io();
-const store = createStore(chatApp);
+const store = createStore(chatApp, applyMiddleware(thunk));
 
-socket.on('TEST', () => {
-  store.dispatch({type: 'RECEIVE_MESSAGE', message: {text: 'tessst', username: 'Jon', date: '10:42'}});
+Socket.on('RECEIVE_MESSAGE', message => {
+  store.dispatch(receiveMessage(JSON.parse(message)));
 })
 
 ReactDOM.render(

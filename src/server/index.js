@@ -32,8 +32,10 @@ app.get('*', (req, res) => {
 
 // SOCKETS
 io.on('connection', socket => {
-  console.log('Someone connected');
-  socket.emit('TEST');
+  socket.on('SEND_MESSAGE', (message) => {
+    console.log(message);
+    io.emit('RECEIVE_MESSAGE', message);
+  });
 });
 
 http.listen(8080);

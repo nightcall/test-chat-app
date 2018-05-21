@@ -1,13 +1,16 @@
+import Socket from '../Socket';
+
 export const INPUT_CHANGE = 'INPUT_CHANGE';
-export const SEND_MESSAGE = 'SEND_MESSAGE';
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
 export const RETRIEVE_CONVERSATION = 'RETRIEVE_CONVERSATION';
 export const RECEIVE_CONVERSATION = 'RECEIVE_CONVERSATION';
 
+// THUNK
 export function sendMessage(message) {
-  return {
-    type: SEND_MESSAGE,
-    message
+  return (dispatch) => {
+
+    // Could've handled errors and sending time but im a lazy ass motherfucker
+    Socket.emit('SEND_MESSAGE', message);
   };
 }
 
