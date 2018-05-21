@@ -22,8 +22,8 @@ function currentInput(state = {
 function messages(state = [], action) {
   switch(action.type) {
     case RECEIVE_MESSAGE:
-      // receive message
-      return state;
+      console.log(action.message.text)
+      return [...state, action.message];
     default:
       return state;
   }
