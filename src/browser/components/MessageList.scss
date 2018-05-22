@@ -1,4 +1,8 @@
 #message-list {
   flex: 1;
   overflow: scroll;
+
+  p {
+    margin: 20px;
+  }
 }

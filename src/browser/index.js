@@ -14,8 +14,8 @@ Socket.on('RECEIVE_MESSAGE', message => {
   store.dispatch(receiveMessage(JSON.parse(message)));
 })
 
-Socket.on('RECEIVE_CONVERSATION', message => {
-  store.dispatch(receiveConversation([{text: message, username:'testi', date:'time fo dat'}]));
+Socket.on('RECEIVE_CONVERSATION', messages => {
+  store.dispatch(receiveConversation(JSON.parse(messages)));
 })
 
 store.dispatch(retrieveConversation());

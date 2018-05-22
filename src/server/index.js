@@ -36,20 +36,19 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
       });
 
       // broadcast to all
-      setTimeout(() => io.emit('RECEIVE_MESSAGE', message), 1000);
+      io.emit('RECEIVE_MESSAGE', message);
     });
 
     // retrieve convo
     socket.on('RETRIEVE_CONVERSATION', () => {
       db.collection('messages').find({}).toArray((err, results) => {
-        console.log(results) // MAIS PAS CELLE LA
+        console.log(results)
 
         // timeout to simulate lag ma dude
-        setTimeout(() => socket.emit('RECEIVE_CONVERSATION', 'whole convo ma dude'), 1000);
+        socket.emit('RECEIVE_CONVERSATION', JSON.stringify(results));
       });
     });
   });
 
   http.listen(8080);
-  client.close();
 });
