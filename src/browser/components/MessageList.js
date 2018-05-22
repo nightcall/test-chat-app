@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import './MessageList.scss';
+import Socket from '../Socket';
 
 const Message = ({text, username, date}) => (
-  <p>[{date}] {username}: {text}</p>
+  <p>[{date}] <strong>{username}</strong>: {text}</p>
 );
 
 class MessageList extends React.PureComponent {
@@ -13,6 +15,7 @@ class MessageList extends React.PureComponent {
   render() {
     return(
       <div id='message-list'>
+        <p>Message list</p>
         {this.props.messages.map(m => <Message {...m} />)}
       </div>
     );

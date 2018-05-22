@@ -9,6 +9,27 @@ class InputComponent extends React.PureComponent {
     super(props);
   }
 
+  submitMessage = (event) => {
+    const {
+      username,
+      currentMessage,
+      handleSubmit
+    } = this.props;
+
+    event.preventDefault();
+
+    if(!currentMessage || !currentMessage.length || currentMessage.length > 500) {
+      console.log('Message not valid');
+      return;
+    }
+
+    handleSubmit(
+      currentMessage,
+      (username.length ? username : 'Anonymous'),
+      new Date(Date.now()).toLocaleTimeString()
+    );
+  }
+
   render() {
     const {
       username,
@@ -18,16 +39,19 @@ class InputComponent extends React.PureComponent {
     } = this.props;
 
     return(
-      <form onSubmit={e => {
-        e.preventDefault();
-        handleSubmit(currentMessage, username, '10:42')
-      }} >
-        <input type='text' value={username}
-          onChange={e => handleChange('username', e.target.value)} />
-        <input name='currentMessage' type='text' value={currentMessage}
-          onChange={e => handleChange('currentMessage', e.target.value)} />
-        <button><img src={sendImg} alt='Send' /></button>
-      </form>
+      <div id='input-component'>
+        <form onSubmit={this.submitMessage} >
+          <input type='text' value={username}
+            onChange={e => handleChange('username', e.target.value)}
+            placeholder='Your username' />
+          <br />
+          <textarea name='currentMessage' value={currentMessage}
+            onChange={e => handleChange('currentMessage', e.target.value)}
+            placeholder='Your message' />
+          <br />
+          <button><img src={sendImg} alt='Send' />Send</button>
+        </form>
+      </div>
     );
   }
 }

@@ -8,13 +8,9 @@ export default class App extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
     return(
-      <div>
+      <div id='container'>
         <MessageList />
         <InputComponent />
       </div>
