@@ -15,6 +15,7 @@
 
     button {
       font-size: 20px;
+      background-color: #fefefe;
       padding: 10px;
       height: 50px;
       border: 2px solid white;
@@ -33,6 +34,14 @@
 
     button:hover {
       background-color: white;
+    }
+
+    button:hover:disabled {
+      background-color: #fefefe;
+    }
+
+    button:disabled {
+      opacity: 0.5;
     }
 
     textarea {

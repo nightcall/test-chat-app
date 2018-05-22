@@ -35,7 +35,8 @@ class InputComponent extends React.PureComponent {
       username,
       currentMessage,
       handleChange,
-      handleSubmit
+      handleSubmit,
+      isRetrievingConversation
     } = this.props;
 
     return(
@@ -49,7 +50,7 @@ class InputComponent extends React.PureComponent {
             onChange={e => handleChange('currentMessage', e.target.value)}
             placeholder='Your message' />
           <br />
-          <button><img src={sendImg} alt='Send' />Send</button>
+          <button disabled={isRetrievingConversation} ><img src={sendImg} alt='Send' />Send</button>
         </form>
       </div>
     );
@@ -59,7 +60,8 @@ class InputComponent extends React.PureComponent {
 const mapStateToProps = state => {
   return {
     username: state.currentInput.username,
-    currentMessage: state.currentInput.currentMessage
+    currentMessage: state.currentInput.currentMessage,
+    isRetrievingConversation: state.isRetrievingConversation
   };
 };
 
