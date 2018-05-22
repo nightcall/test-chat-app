@@ -41,6 +41,11 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
       db.collection('messages').find({}).toArray((err, results) => {
         console.log(results)
 
+//                    HELP ME HERE SENSEI !!!!!!!!!!
+//
+//
+//
+//
 //                                                               ..---..._
 //                                                         ..--""         "-.
 //                                                    ..-"""                 ".
