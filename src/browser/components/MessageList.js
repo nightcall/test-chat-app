@@ -13,9 +13,11 @@ class MessageList extends React.PureComponent {
   }
 
   render() {
+    const { isRetrievingConversation } = this.props;
+
     return(
       <div id='message-list'>
-        <p>Message list</p>
+        <p>{isRetrievingConversation ? 'Retrieving conversation...' : 'Message list'}</p>
         {this.props.messages.map(m => <Message {...m} />)}
       </div>
     );
@@ -24,7 +26,8 @@ class MessageList extends React.PureComponent {
 
 const mapStateToProps = state => {
   return {
-    messages: state.messages
+    messages: state.messages,
+    isRetrievingConversation: state.isRetrievingConversation
   };
 };
 

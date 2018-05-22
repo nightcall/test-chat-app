@@ -40,7 +40,9 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
     socket.on('RETRIEVE_CONVERSATION', () => {
       db.collection('messages').find({}).toArray((err, results) => {
         console.log(results)
-        socket.emit('RECEIVE_CONVERSATION', 'whole convo ma dude');
+
+        // timeout to simulate lag ma dude
+        setTimeout(() => socket.emit('RECEIVE_CONVERSATION', 'whole convo ma dude'), 1000);
       });
     });
   });

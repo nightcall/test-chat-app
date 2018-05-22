@@ -36,9 +36,21 @@ function messages(state = [], action) {
   }
 }
 
+function isRetrievingConversation(state = false, action) {
+  switch(action.type) {
+    case RETRIEVE_CONVERSATION:
+      return true;
+    case RECEIVE_CONVERSATION:
+      return false;
+    default:
+      return state;
+  }
+}
+
 const chatApp = combineReducers({
   currentInput,
-  messages
+  messages,
+  isRetrievingConversation
 });
 
 export default chatApp;
