@@ -9,7 +9,8 @@ import {
   retrieveUsersList,
   receiveUsersList,
   retrieveRoomsList,
-  receiveRoomsList
+  receiveRoomsList,
+  receiveMessage
 } from './../actions/index';
 
 class ChatComponent extends React.Component {
@@ -42,6 +43,10 @@ class ChatComponent extends React.Component {
       this.props.receiveRoomsList(JSON.parse(list));
     })
 
+    socket.on('RECEIVE_MESSAGE', message => {
+      this.props.receiveMessage(JSON.parse(message));
+    })
+
     // && retrieve first time
     this.props.retrieveUsersList();
     this.props.retrieveRoomsList();
@@ -59,7 +64,8 @@ const mapDispatchToProps = dispatch => {
     retrieveUsersList: () => dispatch(retrieveUsersList()),
     receiveUsersList: (list) => dispatch(receiveUsersList(list)),
     retrieveRoomsList: () => dispatch(retrieveRoomsList()),
-    receiveRoomsList: (list) => dispatch(receiveRoomsList(list))
+    receiveRoomsList: (list) => dispatch(receiveRoomsList(list)),
+    receiveMessage: (message) => dispatch(receiveMessage(message))
   };
 };
 

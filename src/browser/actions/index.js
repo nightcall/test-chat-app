@@ -8,6 +8,10 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const OPEN_ROOM = 'OPEN_ROOM';
+export const OPEN_ROOM_FAILED = 'OPEN_ROOM_FAILED';
+export const OPEN_ROOM_SUCCESS = 'OPEN_ROOM_SUCCESS';
+export const MESSAGE_SENT = 'MESSAGE_SENT';
+export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
 
 export function retrieveRoomsList() {
   return (dispatch) => {
@@ -83,8 +87,48 @@ export function createRoom(name, participants, content) {
 }
 
 export function openRoom(id) {
+  return dispatch => {
+    dispatch({type: OPEN_ROOM});
+
+    fetch('/room', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'post',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        id
+      })
+    })
+    .then(
+      data => data.json(),
+      error => console.log('An error occured', error)
+    ).then(data => {
+      if(data.error) {
+        dispatch({type: OPEN_ROOM_FAILED})
+        console.log(data.error);
+      } else {
+        dispatch({type: OPEN_ROOM_SUCCESS, room: data})
+      }
+    });
+  }
+};
+
+export function sendMessage(user, message, room) {
+  return dispatch => {
+    dispatch({type: 'MESSAGE_SENT'});
+    socket.emit('SEND_MESSAGE', JSON.stringify({
+      user,
+      message,
+      room
+    }));
+  }
+}
+
+export function receiveMessage(message) {
   return {
-    type: OPEN_ROOM,
-    id
+    type: RECEIVE_MESSAGE,
+    message
   };
 };

@@ -7,19 +7,32 @@ class ConversationComponent extends React.Component {
   }
 
   render() {
-    const { currentRoom } = this.props; 
-    
-    if(!currentRoom.id) {
+    const {
+      isFetchingRoomData,
+      currentRoom
+    } = this.props; 
+
+    if(isFetchingRoomData) {
       return (
         <div id='conversation-component'>
-          <p>( No room selected )</p>
+          <p>Retrieving data...</p>
         </div>
       );
     }
 
-    return(
+    if(!currentRoom.name) {
+      return (
+        <div id='conversation-component'>
+          <p>(No room currently selectionned)</p>
+        </div>
+      );
+    }
+
+    // return room
+    return (
       <div id='conversation-component'>
-        <p>Conversation {currentRoom.id}</p>
+        <p>{currentRoom.name}</p>
+        {currentRoom.messages.map(m => <p>[{m.username}]: {m.content}</p>)}
       </div>
     );
   }
@@ -27,7 +40,8 @@ class ConversationComponent extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    currentRoom: state.currentRoom
+    currentRoom: state.currentRoom,
+    isFetchingRoomData: state.isFetchingRoomData
   };
 };
 

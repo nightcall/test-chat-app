@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId as o_id } from 'mongodb';
 
 MongoClient.connect('mongodb://localhost:27017', function(err, client) {
   const db = client.db('chat-app');
@@ -79,6 +79,27 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
     });
   });
 
+  app.post('/room', (req, res) => {
+    const { id } = req.body;
+    res.setHeader('Content-Type', 'application/json');
+    console.log(`User requested data of room id=${id}`);
+
+    // test username requested
+    db.collection('rooms').findOne(o_id(id), (err, result) => {
+      
+      // OK
+      if(result) {
+        db.collection('messages').find({roomId: id}).toArray((err, messages) => {
+          const blob = {...result, messages: messages};
+          res.end(JSON.stringify(blob));
+        })
+      } else {
+        console.log(`Could not find room _id=${id}`);
+        res.end(JSON.stringify({error: `Could not find room _id=${id}`}));
+      }
+    });
+  });
+
   // SOCKETS
   io.on('connection', socket => {
     socket.on('RETRIEVE_ROOMS_LIST', () => {
@@ -107,6 +128,27 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
         db.collection('rooms').find({}).toArray((err, result) => {
           io.emit('RECEIVE_ROOMS_LIST', JSON.stringify(result));
         })
+      });
+    })
+
+
+    // RECEIVE MESSAGE
+    socket.on('SEND_MESSAGE', (data) => {
+      // test msg validity
+
+      // insert into db
+      const blob = JSON.parse(data);
+      const msg = {
+        userId: blob.user._id,
+        username: blob.user.name,
+        roomId: blob.room._id,
+        date: Date.now(),
+        content: blob.message
+      };
+
+      db.collection('messages').insertOne(msg, (err, response) => {
+        // send message to all
+        io.emit('RECEIVE_MESSAGE', JSON.stringify(msg));
       });
     })
   });

@@ -6,6 +6,9 @@ import {
   LOGIN_FAILED,
   LOGIN_SUCCESS,
   OPEN_ROOM,
+  OPEN_ROOM_SUCCESS,
+  OPEN_ROOM_FAILED,
+  RECEIVE_MESSAGE,
   login
 } from './../actions/index';
 
@@ -35,8 +38,14 @@ function usersList(state = [], action) {
 function rooms(state = [], action) {
   switch(action.type) {
     case RECEIVE_ROOMS_LIST:
-      console.log(action.list)
       return action.list;
+
+    case RECEIVE_MESSAGE:
+      const nextState = [...state];
+      const i = nextState.findIndex(r => r._id == action.message.roomId);
+      nextState[i].lastMessageContent = action.message.content;
+      nextState[i].lastMessageDate = action.message.date;
+      return nextState;
     default:
       return state;
   }
@@ -44,8 +53,32 @@ function rooms(state = [], action) {
 
 function currentRoom(state = {}, action) {
   switch(action.type) {
+    case OPEN_ROOM_SUCCESS:
+      return {...action.room};
+
+    case RECEIVE_MESSAGE:
+      // Dans le cas ou le message est à ajouter à la conv actuelle
+      if(state._id === action.message.roomId) {
+        const nextState = {...state};
+        nextState.messages = [
+          ...nextState.messages,
+          action.message
+        ];
+        return nextState;
+      }
+
+    default:
+      return state;
+  }
+}
+
+function isFetchingRoomData(state = false, action) {
+  switch(action.type) {
     case OPEN_ROOM:
-      return {id: action.id};
+      return true;
+    case OPEN_ROOM_SUCCESS:
+    case OPEN_ROOM_FAILED:
+      return false;
     default:
       return state;
   }
@@ -76,6 +109,7 @@ export default combineReducers({
   user,
   usersList,
   rooms,
+  isFetchingRoomData,
   currentRoom,
   isLoggedIn,
   isLoggingIn
