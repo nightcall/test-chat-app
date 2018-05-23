@@ -7,6 +7,7 @@ export const RECEIVE_USERS_LIST = 'RECEIVE_USERS_LIST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const OPEN_ROOM = 'OPEN_ROOM';
 
 export function retrieveRoomsList() {
   return (dispatch) => {
@@ -80,3 +81,10 @@ export function createRoom(name, participants, content) {
     }));
   }
 }
+
+export function openRoom(id) {
+  return {
+    type: OPEN_ROOM,
+    id
+  };
+};

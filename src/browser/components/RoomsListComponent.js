@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import './RoomsListComponent.scss';
 import CreateRoomComponent from './CreateRoomComponent';
+import { openRoom } from './../actions/index';
 
-const RoomsListItem = ({name, lastMessageContent, lastMessageDate}) => (
-  <div class='rooms-list-item'>
+const RoomsListItem = ({name, lastMessageContent, lastMessageDate, onClick}) => (
+  <div class='rooms-list-item' onClick={onClick} >
     <h4>{name}</h4>
     <p>{lastMessageContent}</p>
     <p>{lastMessageDate}</p>
@@ -16,14 +18,14 @@ class RoomsListComponent extends React.Component {
     super(props);
 
     this.state = {
-      isCreateRoomComponentOpen: true
+      isCreateRoomComponentOpen: false
     };
   }
 
   toggleCreateRoom = () => this.setState({isCreateRoomComponentOpen: !this.state.isCreateRoomComponentOpen});
 
   render() {
-    const { rooms } = this.props;
+    const { rooms, openRoom } = this.props;
     const { isCreateRoomComponentOpen } = this.state;
 
     return(
@@ -31,7 +33,7 @@ class RoomsListComponent extends React.Component {
         {isCreateRoomComponentOpen ? <CreateRoomComponent closeComponent={this.toggleCreateRoom} /> : null}
         <p style={{cursor: 'pointer'}}
           onClick={this.toggleCreateRoom} >Create new room</p>
-        {rooms.map(r => <RoomsListItem {...r} />)}
+        {rooms.map(r => <RoomsListItem onClick={() => openRoom(r._id)} {...r} />)}
       </div>
     );
   }
@@ -43,4 +45,10 @@ const mapStateToProps = (state) => {
   };
 ;}
 
-export default connect(mapStateToProps)(RoomsListComponent);
+const mapDispatchToProps = dispatch => {
+  return {
+    openRoom: (id) => dispatch(openRoom(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoomsListComponent);

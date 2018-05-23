@@ -5,6 +5,7 @@ import {
   LOGIN_REQUEST,
   LOGIN_FAILED,
   LOGIN_SUCCESS,
+  OPEN_ROOM,
   login
 } from './../actions/index';
 
@@ -41,6 +42,15 @@ function rooms(state = [], action) {
   }
 }
 
+function currentRoom(state = {}, action) {
+  switch(action.type) {
+    case OPEN_ROOM:
+      return {id: action.id};
+    default:
+      return state;
+  }
+}
+
 function isLoggedIn(state = true, action) {
   switch(action.type) {
     case LOGIN_SUCCESS:
@@ -66,6 +76,7 @@ export default combineReducers({
   user,
   usersList,
   rooms,
+  currentRoom,
   isLoggedIn,
   isLoggingIn
 });
