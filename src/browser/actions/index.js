@@ -31,6 +31,13 @@ export function receiveRoomsList(list) {
   }
 };
 
+export function receiveUsersList(list) {
+  return {
+    type: RECEIVE_USERS_LIST,
+    list
+  }
+};
+
 // LOGIN THUNK
 export function login(username, password) {
   return (dispatch) => {
@@ -63,8 +70,13 @@ export function login(username, password) {
   }
 }
 
-export function createRoom() {
+export function createRoom(name, participants, content) {
   return dispatch => {
-    // CREATE ROOM IN THERE
+    socket.emit('CREATE_ROOM', JSON.stringify({
+      name,
+      participants,
+      lastMessageContent: content,
+      lastMessageDate: Date.now()
+    }));
   }
 }

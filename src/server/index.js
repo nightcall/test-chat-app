@@ -84,7 +84,7 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
     socket.on('RETRIEVE_ROOMS_LIST', () => {
       console.log('retrieving rooms list...');
       db.collection('rooms').find({}).toArray((err, result) => {
-        setTimeout(() => socket.emit('RECEIVE_ROOMS_LIST', JSON.stringify(result)), 2000);
+        setTimeout(() => socket.emit('RECEIVE_ROOMS_LIST', JSON.stringify(result)), 500);
       })
     });
 
@@ -92,9 +92,23 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
     socket.on('RETRIEVE_USERS_LIST', () => {
       console.log('retrieving users list...');
       db.collection('users').find({}, {password: 0}).toArray((err, result) => {
-        setTimeout(() => socket.emit('RECEIVE_USERS_LIST', JSON.stringify(result)), 2000);
+        setTimeout(() => socket.emit('RECEIVE_USERS_LIST', JSON.stringify(result)), 500);
       })
     });
+
+    // CREATE ROOM
+    socket.on('CREATE_ROOM', (room) => {
+      // TESTS ROOM VALIDITY ////TODOOOOO
+      
+      // insert into db
+      db.collection('rooms').insertOne(JSON.parse(room), (err, response) => {
+        
+        // Send new rooms list to all
+        db.collection('rooms').find({}).toArray((err, result) => {
+          setTimeout(() => io.emit('RECEIVE_ROOMS_LIST', JSON.stringify(result)), 500);
+        })
+      });
+    })
   });
 
   http.listen(8080);

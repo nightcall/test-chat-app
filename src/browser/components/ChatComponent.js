@@ -5,7 +5,12 @@ import RoomsListComponent from './RoomsListComponent';
 import ConversationComponent from './ConversationComponent';
 import InputComponent from './InputComponent';
 import ProfileComponent from './ProfileComponent';
-import { retrieveUsersList } from './../actions/index';
+import {
+  retrieveUsersList,
+  receiveUsersList,
+  retrieveRoomsList,
+  receiveRoomsList
+} from './../actions/index';
 
 class ChatComponent extends React.Component {
   constructor(props) {
@@ -30,11 +35,16 @@ class ChatComponent extends React.Component {
   componentWillMount() {
     // bind sockets events
     socket.on('RECEIVE_USERS_LIST', list => {
-      console.log(list)
-      //receive
+      this.props.receiveUsersList(JSON.parse(list));
     })
+
+    socket.on('RECEIVE_ROOMS_LIST', list => {
+      this.props.receiveRoomsList(JSON.parse(list));
+    })
+
     // && retrieve first time
     this.props.retrieveUsersList();
+    this.props.retrieveRoomsList();
   }
 }
 
@@ -46,7 +56,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    retrieveUsersList: () => dispatch(retrieveUsersList())
+    retrieveUsersList: () => dispatch(retrieveUsersList()),
+    receiveUsersList: (list) => dispatch(receiveUsersList(list)),
+    retrieveRoomsList: () => dispatch(retrieveRoomsList()),
+    receiveRoomsList: (list) => dispatch(receiveRoomsList(list))
   };
 };
 

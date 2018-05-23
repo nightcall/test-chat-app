@@ -22,7 +22,7 @@ function user(state = {
   }
 }
 
-function usersList(state = [{name: 'Jon'}, {name: 'Andrew'}], action) {
+function usersList(state = [], action) {
   switch(action.type) {
     case RECEIVE_USERS_LIST:
       return action.list;
