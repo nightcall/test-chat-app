@@ -1,17 +1,42 @@
 @import 'colors';
 
 * {
-  font-family: Verdana;
+  font-family: Consolas;
   margin: 0;
   padding: 0;
 }
 
-#container {
+#app-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 100vh;
-}
+  width: 100vw;
 
-h1 {
-  color: $dark_blue_1;
+  #left-container {
+    width: 300px;
+    height: 100vh;
+    border-right: 1px solid #dedede;
+
+    #profile-component {
+      height: 200px;
+      background-color: #dedede;
+    }
+  }
+
+  #right-container {
+    flex-grow: 1;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    #input-component {
+      height: 100px;
+      background-color: #dedede;
+    }
+
+    #conversation-component {
+      flex-grow: 1;
+    }
+  }
 }

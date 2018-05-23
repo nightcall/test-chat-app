@@ -4,21 +4,20 @@ import App from './components/App';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import chatApp from './reducers/reducers';
-import Socket from './Socket';
-import { receiveMessage, receiveConversation, retrieveConversation } from './actions/actions';
+import socket from './Socket';
+import rootReducer from './reducers/index';
+import { retrieveRoomsList, receiveRoomsList } from './actions/index';
 
-const store = createStore(chatApp, applyMiddleware(thunk));
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
-Socket.on('RECEIVE_MESSAGE', message => {
-  store.dispatch(receiveMessage(JSON.parse(message)));
-})
+// setting up socket events
+/*
+socket.on('RECEIVE_ROOMS_LIST', list => {
+  store.dispatch(receiveRoomsList(JSON.parse(list)));
+});
 
-Socket.on('RECEIVE_CONVERSATION', messages => {
-  store.dispatch(receiveConversation(JSON.parse(messages)));
-})
-
-store.dispatch(retrieveConversation());
+store.dispatch(retrieveRoomsList());
+*/
 
 ReactDOM.render(
   <Provider store={store} >

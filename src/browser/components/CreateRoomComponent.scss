@@ -1,0 +1,20 @@
+@import 'utils';
+
+#create-room-comp {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  div {
+    width: 500px;
+    height: 350px;
+    background-color: white;
+  }
+}
